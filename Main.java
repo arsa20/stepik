@@ -1,16 +1,14 @@
-import Triangles.EquilateralTriangle;
+public class Main import Triangles.EquilateralTriangle;
 import Triangles.IsoscelesTriangle;
 import Triangles.RightTriangle;
 import Triangles.Triangle;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
         // Пример использования классов
-        Triangles.Triangle equilateral = new EquilateralTriangle(5);
+        Triangle equilateral = new EquilateralTriangle(5);
         System.out.println("Равносторонний треугольник:");
         System.out.println("Площадь: " + equilateral.getArea());
         System.out.println("Периметр: " + equilateral.getPerimeter());
@@ -25,7 +23,11 @@ public class Main {
         System.out.println("Площадь: " + right.getArea());
         System.out.println("Периметр: " + right.getPerimeter());
 
+        // Путь к файлам
         String inputFile = "input.txt";
+        String outputFile = "output.txt";
+
+        // Чтение строки из файла
         String line = readLineFromFile(inputFile);
 
         if (line != null) {
@@ -33,6 +35,9 @@ public class Main {
         } else {
             System.out.println("Не удалось прочитать строку из файла.");
         }
+
+        // Запись строки в output.txt
+        writeLineToFile(outputFile, "Ответ: " + line);
     }
 
     // Метод для чтения одной строки из файла
@@ -44,5 +49,16 @@ public class Main {
             return null;
         }
     }
-}
 
+    // Метод для записи строки в файл
+    public static void writeLineToFile(String fileName, String line) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            writer.println(line);  // Записываем строку в файл
+            System.out.println("Запись в файл " + fileName + " завершена.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+{
+}
