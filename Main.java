@@ -23,42 +23,62 @@ public class Main {
         System.out.println("Площадь: " + right.getArea());
         System.out.println("Периметр: " + right.getPerimeter());
 
-        // Путь к файлам
         String inputFile = "input.txt";
         String outputFile = "output.txt";
 
-        // Чтение строки из файла
-        String line = readLineFromFile(inputFile);
+        // Чтение строк из файла и обработка
+        List<String> inputLines = readLinesFromFile(inputFile);
 
-        if (line != null) {
-            System.out.println("Считанная строка из файла: " + line);
+        if (inputLines != null) {
+            // Создаем и открываем файл для записи
+            try (PrintWriter writer = new PrintWriter(new FileWriter(outputFile))) {
+                // Обрабатываем каждую строку
+                for (String line : inputLines) {
+                    String result = calculate(line);
+                    writer.println(line + " = " + result);  // Записываем в файл
+                    System.out.println(line + " = " + result); // Печатаем в консоль
+                }
+                System.out.println("Запись в файл " + outputFile + " завершена.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
-            System.out.println("Не удалось прочитать строку из файла.");
+            System.out.println("Не удалось прочитать строки из файла.");
         }
-
-        // Запись строки в output.txt
-        writeLineToFile(outputFile, "Ответ: " + line);
     }
 
-    // Метод для чтения одной строки из файла
-    public static String readLineFromFile(String fileName) {
+    // Метод для чтения всех строк из файла
+    public static List<String> readLinesFromFile(String fileName) {
+        List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            return reader.readLine();  // Считываем одну строку
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            return lines;
         } catch (IOException e) {
-            e.printStackTrace();  // Выводим ошибку, если файл не найден или возникли другие проблемы
+            e.printStackTrace();
             return null;
         }
     }
 
-    // Метод для записи строки в файл
-    public static void writeLineToFile(String fileName, String line) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            writer.println(line);  // Записываем строку в файл
-            System.out.println("Запись в файл " + fileName + " завершена.");
-        } catch (IOException e) {
-            e.printStackTrace();
+    // Метод для вычисления ответа для строки (простой калькулятор)
+    public static String calculate(String expression) {
+        try {
+            // Используем eval для вычисления арифметического выражения
+            return String.valueOf(eval(expression));
+        } catch (Exception e) {
+            return "Ошибка вычисления"; // В случае ошибки в вычислениях
         }
     }
+
+    // Простой метод для вычисления арифметических выражений
+    // Можно использовать библиотеки или написать парсер, но для простоты используем eval
+    public static double eval(String expression) throws Exception {
+        // Используем встроенную JavaScript библиотеку для выполнения математических операций
+        // Это временное решение, чтобы продемонстрировать работу
+        javax.script.ScriptEngine engine = new javax.script.ScriptEngineManager().getEngineByName("JavaScript");
+        return ((Number) engine.eval(expression)).doubleValue();
+    }
 }
-{
 }
